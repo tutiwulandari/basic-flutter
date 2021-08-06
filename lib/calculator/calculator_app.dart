@@ -85,7 +85,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                     color: Colors.amber,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
-                    onPressed: () {},
+                    onPressed: () => {},
                     child: Text("C")),
               ),
               Padding(
