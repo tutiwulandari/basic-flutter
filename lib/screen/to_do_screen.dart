@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projects/model/to_do.dart';
+import 'package:projects/repository/todo_repository.dart';
 
 class ToDoScreen extends StatefulWidget {
   ToDoScreen({Key? key}) : super(key: key);
@@ -9,7 +10,7 @@ class ToDoScreen extends StatefulWidget {
 }
 
 class _ToDoScreenState extends State<ToDoScreen> {
-  List<ToDo> todos = <ToDo>[];
+  ToDoRepository _toDoRepository = ToDoRepository();
   TextEditingController todoName = new TextEditingController();
   TextEditingController todoDescription = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -22,18 +23,6 @@ class _ToDoScreenState extends State<ToDoScreen> {
   //     ),
   //   );
   // }
-
-  addTodos(ToDo toDo) {
-    setState(() {
-      todos.add(toDo);
-    });
-  }
-
-  deleteTodos(int id) {
-    setState(() {
-      todos.removeWhere((element) => element.id == id);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +80,6 @@ class _ToDoScreenState extends State<ToDoScreen> {
                           },
                         ),
                       ),
-                      
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ElevatedButton(
@@ -99,8 +87,10 @@ class _ToDoScreenState extends State<ToDoScreen> {
                                 primary: Colors.pinkAccent),
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                addTodos(new ToDo(todos.length + 1,
-                                    todoName.text, todoDescription.text));
+                                setState(() {
+                                  _toDoRepository.addTodos( new ToDo(
+                                    _toDoRepository.getListToDo().length, todoName.text, todoDescription.text));
+                                });
                               }
                             },
                             child: Text(
@@ -117,7 +107,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                     margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
                     child: Scrollbar(
                         child: ListView.builder(
-                            itemCount: todos.length,
+                            // itemCount: _todos.length,
                             padding: EdgeInsets.all(8),
                             itemBuilder: (context, index) {
                               return Column(
@@ -128,15 +118,22 @@ class _ToDoScreenState extends State<ToDoScreen> {
                                       color: Colors.pinkAccent,
                                       size: 40.0,
                                     ),
-                                    title: Text(todos[index].todo),
+                                    title: Text(_toDoRepository
+                                        .getListToDo()[index]
+                                        .todo),
                                     onTap: () {
-                                      Navigator.pushNamed(context,"/detail");
+                                      Navigator.pushNamed(context, "/detail");
                                     },
                                     trailing: IconButton(
-                                        onPressed: () =>
-                                            {deleteTodos(todos[index].id)}
-                                            ,
-                                        icon: Icon(Icons.delete, color: Colors.pinkAccent,)),
+                                        onPressed: () {
+                                          setState(() {
+                                            _toDoRepository.deleteTodos(_toDoRepository.getListToDo()[index].id);
+                                          });
+                                        },
+                                        icon: Icon(
+                                          Icons.delete,
+                                          color: Colors.pinkAccent,
+                                        )),
                                   ),
                                 ],
                               );
