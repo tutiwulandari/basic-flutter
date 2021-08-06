@@ -79,7 +79,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
           Container(
             alignment: Alignment.centerRight,
             padding: EdgeInsets.symmetric(vertical: 24.0, horizontal: 12.0),
-            child: Column(
+            child:Row(
               children: [
                 Text(
                   output,
