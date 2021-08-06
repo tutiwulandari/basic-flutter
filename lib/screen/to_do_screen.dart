@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projects/model/to_do.dart';
 
 class ToDoScreen extends StatefulWidget {
   ToDoScreen({Key? key}) : super(key: key);
@@ -8,28 +9,29 @@ class ToDoScreen extends StatefulWidget {
 }
 
 class _ToDoScreenState extends State<ToDoScreen> {
-  List todos = [];
+  List<ToDo> todos = <ToDo>[];
   TextEditingController todoName = new TextEditingController();
+  TextEditingController todoDescription = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Widget _listTodo() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: todos.map((e) => new Text(e)).toList(),
-      ),
-    );
-  }
+  // Widget _listTodo() {
+  //   return Padding(
+  //     padding: const EdgeInsets.all(8.0),
+  //     child: Column(
+  //       children: todos.map((e) => new Text(e)).toList(),
+  //     ),
+  //   );
+  // }
 
-  addTodos() {
+  addTodos(ToDo toDo) {
     setState(() {
-      todos.add(todoName.text);
+      todos.add(toDo);
     });
   }
 
-  deleteTodos(String name) {
+  deleteTodos(int id) {
     setState(() {
-      todos.removeWhere((element) => element == name);
+      todos.removeWhere((element) => element.id == id);
     });
   }
 
@@ -47,10 +49,31 @@ class _ToDoScreenState extends State<ToDoScreen> {
                     key: _formKey,
                     child: Column(children: [
                       Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                                labelText: 'Todo',
+                                fillColor: Color(0xffF1F0F5),
+                                filled: true,
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: BorderSide()),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: BorderSide())),
+                            controller: todoName,
+                            validator: (String? value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your ToDo';
+                              }
+                              return null;
+                            },
+                          )),
+                      Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
                           decoration: InputDecoration(
-                              labelText: 'Name',
+                              labelText: 'Description',
                               fillColor: Color(0xffF1F0F5),
                               filled: true,
                               enabledBorder: OutlineInputBorder(
@@ -59,25 +82,30 @@ class _ToDoScreenState extends State<ToDoScreen> {
                               focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
                                   borderSide: BorderSide())),
-                          controller: todoName,
+                          controller: todoDescription,
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your ToDo';
+                              return 'Please enter your Description';
                             }
                             return null;
                           },
                         ),
                       ),
+                      
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(primary: Colors.pinkAccent),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.pinkAccent),
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                addTodos();
+                                addTodos(new ToDo(todos.length + 1,
+                                    todoName.text, todoDescription.text));
                               }
                             },
-                            child: Text('Submit',)),
+                            child: Text(
+                              'Submit',
+                            )),
                       )
                     ]),
                   ),
@@ -96,13 +124,18 @@ class _ToDoScreenState extends State<ToDoScreen> {
                                 children: [
                                   ListTile(
                                     leading: Icon(
-                                      Icons.person, color: Colors.pinkAccent,
+                                      Icons.person,
+                                      color: Colors.pinkAccent,
                                       size: 40.0,
                                     ),
-                                    title: Text(todos[index]),
+                                    title: Text(todos[index].todo),
+                                    onTap: () {
+                                      Navigator.pushNamed(context,"/detail");
+                                    },
                                     trailing: IconButton(
                                         onPressed: () =>
-                                            {deleteTodos(todos[index])},
+                                            {deleteTodos(todos[index].id)}
+                                            ,
                                         icon: Icon(Icons.delete, color: Colors.pinkAccent,)),
                                   ),
                                 ],
