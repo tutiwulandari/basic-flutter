@@ -15,14 +15,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
   TextEditingController todoDescription = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  // Widget _listTodo() {
-  //   return Padding(
-  //     padding: const EdgeInsets.all(8.0),
-  //     child: Column(
-  //       children: todos.map((e) => new Text(e)).toList(),
-  //     ),
-  //   );
-  // }
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +34,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
                             decoration: InputDecoration(
-                                labelText: 'Todo',
+                                labelText: 'Name',
                                 fillColor: Color(0xffF1F0F5),
                                 filled: true,
                                 enabledBorder: OutlineInputBorder(
@@ -53,7 +46,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                             controller: todoName,
                             validator: (String? value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter your ToDo';
+                                return 'Please enter your Name';
                               }
                               return null;
                             },
@@ -107,7 +100,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                     margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
                     child: Scrollbar(
                         child: ListView.builder(
-                            // itemCount: _todos.length,
+                            itemCount: _toDoRepository.getListToDo().length,
                             padding: EdgeInsets.all(8),
                             itemBuilder: (context, index) {
                               return Column(
