@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projects/model/to_do.dart';
 import 'package:projects/repository/todo_repository.dart';
+import 'package:projects/screen/to_do_detail_screen.dart';
 
 class ToDoScreen extends StatefulWidget {
   ToDoScreen({Key? key}) : super(key: key);
@@ -115,7 +116,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
                                         .getListToDo()[index]
                                         .todo),
                                     onTap: () {
-                                      Navigator.pushNamed(context, "/detail");
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => 
+                                      ToDoDetailScreen(toDo: _toDoRepository.getListToDo()[index])));
                                     },
                                     trailing: IconButton(
                                         onPressed: () {
