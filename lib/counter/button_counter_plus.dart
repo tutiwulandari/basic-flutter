@@ -12,7 +12,8 @@ class ButtonCounterPlus extends StatelessWidget {
     return Container(
       child: (FloatingActionButton(
         onPressed: () {
-         Provider.of<CounterViewModel>(context, listen: false).increment();
+        //  Provider.of<CounterViewModel>(context, listen: false).increment();
+        context.read<CounterViewModel>().increment();
         },
         child: Text(
           '+',

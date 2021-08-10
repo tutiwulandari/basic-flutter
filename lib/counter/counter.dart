@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projects/counter/button_counter_min.dart';
-import 'package:projects/counter/button_counter_plus.dart';
+import 'package:projects/counter/counter_operator.dart';
 import 'package:projects/counter/counter_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -20,22 +19,32 @@ class _CounterScreenState extends State<CounterScreen> {
         ),
         body: ChangeNotifierProvider(
           create: (contex) => CounterViewModel(),
-          child: Container(
-            child: Center(
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    ButtonCounterPlus(),
-                    Consumer<CounterViewModel>(builder: (contex, value, child) {
-                      return Text(
-                        '${value.number}',
-                        style: TextStyle(fontSize: 40.0),
-                      );
-                    }),
-                    ButtonCounterMin()
-                  ]),
-            ),
-          ),
+          builder: (context, child) {
+            return Column(
+              children: [Text('${context.watch<CounterViewModel>().number}', 
+              style: TextStyle(fontSize: 30.0) ,),
+              CounterOperator()
+              ],
+            );
+          },
+          // child: Container(
+          //   child: Center(
+          //     child: Row(
+          //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //         children: <Widget>[
+          //           CounterOperator(),
+          //           // ButtonCounterPlus(),
+          //           // Consumer<CounterViewModel>(builder: (contex, value, child) {
+          //           //   return Text(
+          //           //     '${value.number}',
+          //           //     style: TextStyle(fontSize: 40.0),
+          //           //   );
+          //           // }),
+          //           // ButtonCounterMin()
+          //         ]
+          //         ),
+          //   ),
+          // ),
         ));
   }
 }
